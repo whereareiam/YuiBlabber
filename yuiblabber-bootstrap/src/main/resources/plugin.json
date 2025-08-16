@@ -1,0 +1,16 @@
+{
+  "id": "yuiblabber",
+  "name": "YuiBlabber",
+  "version": "0.0.1",
+  "dependencies": [
+    {
+      "id": "yuisynapse",
+      "required": true,
+      "injectClassLoader": true
+    }
+  ],
+  "authors": [
+    "whereareiam"
+  ],
+  "entrypoint": "me.whereareiam.yuiblabber.YuiBlabber"
+}

@@ -1,6 +1,6 @@
-rootProject.name = "YuiPlugin"
+rootProject.name = "YuiBlabber"
 
-include(":yuiplugin-adapter-config")
-include(":yuiplugin-common-api")
-include(":yuiplugin-bootstrap")
-include(":yuiplugin-common")
+include(":yuiblabber-adapter-config")
+include(":yuiblabber-common-api")
+include(":yuiblabber-bootstrap")
+include(":yuiblabber-common")

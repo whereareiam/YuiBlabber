@@ -17,15 +17,15 @@ subprojects {
         mavenLocal()
     }
 
-    if (project.name != "yuiplugin-common-api") {
+    if (project.name != "yuiblabber-common-api") {
         dependencies {
-            "compileOnly"(project(":yuiplugin-common-api"))
+            "compileOnly"(project(":yuiblabber-common-api"))
         }
     }
 
     dependencies {
-        "compileOnly"(rootProject.libs.yui)
-        "compileOnly"(rootProject.libs.spring.boot)
+        "compileOnly"(rootProject.libs.bundles.yui)
+        "compileOnly"(rootProject.libs.bundles.spring)
         "compileOnly"(rootProject.libs.jda)
 
         "compileOnly"(rootProject.libs.lombok)
