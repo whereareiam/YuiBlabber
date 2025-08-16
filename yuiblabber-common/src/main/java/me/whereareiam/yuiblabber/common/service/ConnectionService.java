@@ -26,11 +26,12 @@ public class ConnectionService {
 		connections.stream()
 				.filter(Connection::isEnabled)
 				.forEach(conn -> synapseService.create(conn)
-						.thenAccept(created -> log.info("Prepared Synapse connection: {} (model={})", created.getId(), created.getConfiguration() != null ? created.getConfiguration().getModel() : "unknown"))
 						.exceptionally(ex -> {
 							log.error("Failed to prepare Synapse connection {}", conn.getId(), ex);
 							return null;
 						}));
+
+		log.info("[YuiBlabber] Prepared {} connections", connections.size());
 	}
 
 	public void shutdown() {
@@ -40,11 +41,12 @@ public class ConnectionService {
 		connections.stream()
 				.filter(Connection::isEnabled)
 				.forEach(conn -> synapseService.close(conn)
-						.thenRun(() -> log.info("Closed Synapse connection: {}", conn.getId()))
 						.exceptionally(ex -> {
 							log.warn("Failed to close Synapse connection {}", conn.getId(), ex);
 							return null;
 						}));
+
+		log.info("[YuiBlabber] Closed {} connections", connections.size());
 	}
 }
 

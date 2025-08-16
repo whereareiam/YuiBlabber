@@ -7,12 +7,14 @@ import me.whereareiam.yuiblabber.api.model.config.BlabberSettings;
 import me.whereareiam.yuisynapse.api.input.SynapseService;
 import me.whereareiam.yuisynapse.api.model.Connection;
 import me.whereareiam.yuisynapse.api.model.Message;
+import me.whereareiam.yuisynapse.api.model.Options;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -21,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Component
@@ -60,15 +63,7 @@ public class ChannelRoutingService {
 			return;
 		}
 
-		log.debug("Starting typing indicator while awaiting AI response for channel {}", channelId);
-		Disposable typing = Flux.interval(Duration.ZERO, Duration.ofSeconds(7))
-				.subscribe(n -> {
-					log.trace("typing tick {} for channel {}", n, channelId);
-					event.getChannel().sendTyping().queue(
-							null,
-							err -> log.warn("Failed to send typing indicator to channel {}", channelId, err)
-					);
-				});
+		AtomicReference<Disposable> typingRef = new AtomicReference<>();
 
 		Message userMessage = Message.builder()
 				.id(event.getMessageId())
@@ -83,10 +78,23 @@ public class ChannelRoutingService {
 				.build();
 
 		log.debug("Dispatching message to Synapse connection {}", connection.getId());
-		Publisher<Message> responsePub = synapseService.send(connection, userMessage);
+		Publisher<Message> responsePub = synapseService.send(connection, userMessage, Options.builder().stream(true).build());
 		StringBuilder contentBuffer = new StringBuilder();
 		Flux.from(responsePub)
+				.publishOn(Schedulers.boundedElastic())
 				.doOnNext(resp -> {
+					if (typingRef.get() == null) {
+						log.debug("Starting typing indicator while streaming AI response for channel {}", channelId);
+						Disposable typing = Flux.interval(Duration.ZERO, Duration.ofSeconds(7))
+								.subscribe(n -> {
+									log.trace("typing tick {} for channel {}", n, channelId);
+									event.getChannel().sendTyping().queue(
+											null,
+											err -> log.warn("Failed to send typing indicator to channel {}", channelId, err)
+									);
+								});
+						typingRef.set(typing);
+					}
 					String chunk = resp.getContent();
 					if (chunk != null) contentBuffer.append(chunk);
 				})
@@ -101,7 +109,8 @@ public class ChannelRoutingService {
 				})
 				.doFinally(sig -> {
 					log.trace("typing disposed for channel {} due to {}", channelId, sig);
-					if (!typing.isDisposed()) typing.dispose();
+					Disposable typing = typingRef.get();
+					if (typing != null && !typing.isDisposed()) typing.dispose();
 				})
 				.subscribe();
 	}

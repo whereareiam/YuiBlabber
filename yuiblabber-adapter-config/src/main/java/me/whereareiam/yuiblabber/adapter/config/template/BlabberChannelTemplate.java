@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ChannelConfigTemplate implements DefaultConfig<BlabberChannel> {
+public class BlabberChannelTemplate implements DefaultConfig<BlabberChannel> {
 	@Override
 	public BlabberChannel getDefault() {
 		BlabberChannel channel = new BlabberChannel();

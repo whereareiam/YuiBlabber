@@ -19,14 +19,14 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 @Component
-public class BlabberChannelConfigProvider implements Reloadable {
+public class BlabberChannelProvider implements Reloadable {
 	private final Path channelsPath;
 	private final ConfigurationLoader configurationLoader;
 
 	private List<BlabberChannel> blabberChannels = List.of();
 
 	@Autowired
-	public BlabberChannelConfigProvider(
+	public BlabberChannelProvider(
 			@Qualifier("channelsPath") Path channelsPath,
 			ConfigurationLoader configurationLoader,
 			Registry<Reloadable> registry

@@ -2,7 +2,7 @@ package me.whereareiam.yuiblabber.adapter.config;
 
 import me.whereareiam.yui.api.output.config.ConfigurationManager;
 import me.whereareiam.yui.api.output.config.DefaultConfig;
-import me.whereareiam.yuiblabber.adapter.config.provider.BlabberChannelConfigProvider;
+import me.whereareiam.yuiblabber.adapter.config.provider.BlabberChannelProvider;
 import me.whereareiam.yuiblabber.adapter.config.provider.BlabberSettingsProvider;
 import me.whereareiam.yuiblabber.api.model.config.BlabberChannel;
 import me.whereareiam.yuiblabber.api.model.config.BlabberSettings;
@@ -23,8 +23,8 @@ public class ConfigConfiguration {
 	}
 
 	@Bean
-	public List<BlabberChannel> channels(BlabberChannelConfigProvider blabberChannelConfigProvider) {
-		return blabberChannelConfigProvider.getAll();
+	public List<BlabberChannel> channels(BlabberChannelProvider blabberChannelProvider) {
+		return blabberChannelProvider.getAll();
 	}
 
 	@Bean
