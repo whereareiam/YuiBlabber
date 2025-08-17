@@ -2,10 +2,11 @@ package me.whereareiam.yuiblabber.adapter.config;
 
 import me.whereareiam.yui.api.output.config.ConfigurationManager;
 import me.whereareiam.yui.api.output.config.DefaultConfig;
-import me.whereareiam.yuiblabber.adapter.config.provider.BlabberChannelProvider;
+import me.whereareiam.yuiblabber.adapter.config.provider.BlabberChannelsProvider;
 import me.whereareiam.yuiblabber.adapter.config.provider.BlabberSettingsProvider;
-import me.whereareiam.yuiblabber.api.model.config.BlabberChannel;
 import me.whereareiam.yuiblabber.api.model.config.BlabberSettings;
+import me.whereareiam.yuiblabber.api.model.config.channel.BlabberChannel;
+import me.whereareiam.yuiblabber.api.model.config.channel.BlabberChannels;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -23,8 +24,8 @@ public class ConfigConfiguration {
 	}
 
 	@Bean
-	public List<BlabberChannel> channels(BlabberChannelProvider blabberChannelProvider) {
-		return blabberChannelProvider.getAll();
+	public List<BlabberChannel> channels(BlabberChannelsProvider blabberChannelsProvider) {
+		return blabberChannelsProvider.get();
 	}
 
 	@Bean
@@ -43,6 +44,6 @@ public class ConfigConfiguration {
 	@Autowired
 	public void setTemplates(ApplicationContext ctx, ConfigurationManager configManager) {
 		configManager.addTemplate(BlabberSettings.class, ctx.getBean("blabberSettingsTemplate", DefaultConfig.class));
-		configManager.addTemplate(BlabberChannel.class, ctx.getBean("blabberChannelTemplate", DefaultConfig.class));
+		configManager.addTemplate(BlabberChannels.class, ctx.getBean("blabberChannelsTemplate", DefaultConfig.class));
 	}
 }

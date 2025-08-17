@@ -2,7 +2,7 @@ package me.whereareiam.yuiblabber;
 
 import lombok.AllArgsConstructor;
 import me.whereareiam.yui.api.output.plugin.YuiPlugin;
-import me.whereareiam.yuiblabber.common.service.ConnectionService;
+import me.whereareiam.yuiblabber.common.connection.ConnectionService;
 import org.springframework.context.ApplicationContext;
 
 @AllArgsConstructor

@@ -19,9 +19,11 @@ public class BlabberSettingsProvider implements Reloadable {
 	private BlabberSettings settings;
 
 	@Autowired
-	public BlabberSettingsProvider(@Qualifier("pluginPath") Path pluginPath,
-	                               ConfigurationLoader configLoader,
-	                               Registry<Reloadable> registry) {
+	public BlabberSettingsProvider(
+			@Qualifier("pluginPath") Path pluginPath,
+			ConfigurationLoader configLoader,
+			Registry<Reloadable> registry
+	) {
 		this.pluginPath = pluginPath;
 		this.configLoader = configLoader;
 
@@ -34,9 +36,9 @@ public class BlabberSettingsProvider implements Reloadable {
 	}
 
 	public BlabberSettings get() {
-		if (settings == null) {
+		if (settings == null)
 			load();
-		}
+
 		return settings;
 	}
 

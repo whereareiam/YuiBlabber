@@ -1,7 +1,7 @@
 package me.whereareiam.yuiblabber.common.listener;
 
 import lombok.RequiredArgsConstructor;
-import me.whereareiam.yuiblabber.common.service.ChannelRoutingService;
+import me.whereareiam.yuiblabber.common.channel.ChannelRoutingService;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;

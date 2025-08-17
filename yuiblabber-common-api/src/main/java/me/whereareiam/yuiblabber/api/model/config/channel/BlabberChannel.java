@@ -1,4 +1,4 @@
-package me.whereareiam.yuiblabber.api.model.config;
+package me.whereareiam.yuiblabber.api.model.config.channel;
 
 import lombok.Getter;
 import lombok.Setter;

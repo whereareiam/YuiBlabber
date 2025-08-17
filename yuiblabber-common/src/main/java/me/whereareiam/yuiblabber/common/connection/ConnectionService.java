@@ -1,4 +1,4 @@
-package me.whereareiam.yuiblabber.common.service;
+package me.whereareiam.yuiblabber.common.connection;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class ConnectionService {
 	public void warmup() {
 		List<Connection> connections = blabberSettings.getConnections();
 		if (connections == null || connections.isEmpty()) {
-			log.info("No connections defined in Blabber settings to warm up");
+			log.info("[YuiBlabber]: No connections defined in Blabber settings to warm up");
 			return;
 		}
 
@@ -31,7 +31,7 @@ public class ConnectionService {
 							return null;
 						}));
 
-		log.info("[YuiBlabber] Prepared {} connections", connections.size());
+		log.info("[YuiBlabber]: Prepared {} connections", connections.size());
 	}
 
 	public void shutdown() {
@@ -46,7 +46,7 @@ public class ConnectionService {
 							return null;
 						}));
 
-		log.info("[YuiBlabber] Closed {} connections", connections.size());
+		log.info("[YuiBlabber]: Closed {} connections", connections.size());
 	}
 }
 
