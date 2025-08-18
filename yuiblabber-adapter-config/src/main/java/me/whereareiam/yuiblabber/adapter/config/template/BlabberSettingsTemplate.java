@@ -7,6 +7,7 @@ import me.whereareiam.yuisynapse.api.model.config.tool.HistoryToolConfig;
 import me.whereareiam.yuisynapse.api.model.config.tool.InterestToolConfig;
 import me.whereareiam.yuisynapse.api.model.config.tool.LanguageEnforcerToolConfig;
 import me.whereareiam.yuisynapse.api.model.config.tool.UserInfoToolConfig;
+import me.whereareiam.yuisynapse.api.model.config.tool.base.ToolDefinition;
 import me.whereareiam.yuisynapse.api.type.ProviderType;
 import me.whereareiam.yuisynapse.api.type.ToolPhase;
 import org.springframework.stereotype.Component;
@@ -29,29 +30,29 @@ public class BlabberSettingsTemplate implements DefaultConfig<BlabberSettings> {
 								.provider(ProviderType.OPENROUTER)
 								.model("openai/gpt-oss-20b:free")
 								.toolchain(List.of(
-										Connection.Configuration.ToolInstanceConfig.builder()
-												.name("interest")
+										ToolDefinition.builder()
+												.name("INTEREST")
 												.phase(ToolPhase.PRE_PROCESSING)
 												.order(10)
 												.enabled(true)
 												.config(buildInterestConfig())
 												.build(),
-										Connection.Configuration.ToolInstanceConfig.builder()
-												.name("language-enforcer")
+										ToolDefinition.builder()
+												.name("LANGUAGE_ENFORCER")
 												.phase(ToolPhase.PRE_PROCESSING)
 												.order(20)
 												.enabled(true)
 												.config(buildLanguageConfig())
 												.build(),
-										Connection.Configuration.ToolInstanceConfig.builder()
-												.name("user-info")
+										ToolDefinition.builder()
+												.name("USER_INFO")
 												.phase(ToolPhase.CONTEXT_PROVIDER)
 												.order(30)
 												.enabled(true)
 												.config(buildUserInfoConfig())
 												.build(),
-										Connection.Configuration.ToolInstanceConfig.builder()
-												.name("history")
+										ToolDefinition.builder()
+												.name("HISTORY")
 												.phase(ToolPhase.CONTEXT_PROVIDER)
 												.order(40)
 												.enabled(true)
@@ -80,12 +81,15 @@ public class BlabberSettingsTemplate implements DefaultConfig<BlabberSettings> {
 	private static InterestToolConfig buildInterestConfig() {
 		InterestToolConfig config = new InterestToolConfig();
 		config.setThreshold(0.5);
+		config.setMentionWeight(1.0);
+		config.setKeywordWeight(0.6);
 		config.setPassIfMentioned(true);
+		config.setPassIfKeyword(true);
 		config.setMentions(List.of("@Yui"));
 		config.setPrefixes(List.of("yui ", "y:"));
 		config.setPassIfContinuation(true);
 		config.setContinuationAllowMin(0.2);
-		config.setKeywords(Map.of(
+		config.setPositiveKeywords(Map.of(
 				"en", List.of("help", "plugin", "error", "yui"),
 				"ru", List.of("бот", "Юи", "Юяяя")
 		));
